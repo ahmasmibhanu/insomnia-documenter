@@ -17,6 +17,7 @@ Like [Postman Documenter](https://www.getpostman.com/api-documentation-generator
 - [Updating the API](#updating-the-api)
 - [Custom Root Paths](#custom-root-paths)
 - [Running the Page Locally](#running-the-page-locally)
+- [Troubleshooting & Common Issues](#troubleshooting--common-issues)
 - [Insomnia Plugin](#insomnia-plugin)
 - [Changelog](#changelog)
 - [Contribution](#contribution)
@@ -92,6 +93,47 @@ npx serve
 ```
 
 The page will be available at http://localhost:5000.
+
+## Troubleshooting & Common Issues
+
+### Blank page or data not loading when opening `index.html`
+Opening the generated `index.html` file directly in a browser will usually fail because the application uses `fetch` to load the `insomnia.json` file. Most browsers block this when using the `file://` protocol.
+
+Solution:
+Serve the files using a local web server, for example:
+
+```sh
+npx serve
+```
+Then open the page at http://localhost:5000.
+
+### insomnia.json is not found or not loaded
+Make sure that:
+*The exported Insomnia workspace file is named exactly insomnia.json
+*The file is located in the same directory as index.html, unless a custom root path is configured
+*The JSON file is a valid Insomnia export (v4)
+If you are using a custom root path, ensure the data-root attribute is correctly set (see Custom Root Paths).
+
+### Documentation works locally but not on GitHub Pages
+When hosting the documentation on GitHub Pages or under a subpath, you must configure a custom root path.
+Update index.html:
+
+<div id="app" data-root="/your-repository-name"></div>
+
+Do not include a trailing slash in the data-root value.
+
+### Logo or favicon not appearing
+The logo and favicon must:
+*Be named logo.png and favicon.ico
+*Be placed in the same directory as index.html
+Note that the data-root attribute does not affect where the logo and favicon are loaded from.
+
+### Changes to the Insomnia workspace are not reflected
+After exporting a new version of your Insomnia workspace:
+*Replace the existing insomnia.json file
+*Refresh the page (hard refresh may be required)
+No rebuild is necessary, as the app dynamically loads the JSON file.
+
 
 ## Insomnia Plugin
 
